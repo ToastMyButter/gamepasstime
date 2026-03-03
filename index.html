@@ -50,12 +50,7 @@ body::before {
   width: 350px;
 }
 
-h1 {
-  margin-bottom: 20px;
-  text-shadow: 0 0 10px #00ff00;
-}
-
-input {
+input, button {
   padding: 10px;
   font-size: 16px;
   border-radius: 6px;
@@ -69,14 +64,11 @@ input {
   width: 90%;
 }
 
-#loadingScreen {
-  display: none;
-  margin-top: 20px;
-  font-size: 16px;
-  text-shadow: 0 0 8px #00ff00;
+button {
+  cursor: pointer;
 }
 
-#videoContainer {
+#loadingScreen, #videoContainer {
   display: none;
   margin-top: 20px;
 }
@@ -86,18 +78,123 @@ video {
   border-radius: 12px;
   box-shadow: 0 0 20px #00ff00;
 }
+
+#gameKey {
+  margin-top: 15px;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
 </style>
 </head>
 
 <body>
 <div class="container">
-  <h1>ENTER SSS</h1>
 
+<div id="mainPage">
+  <h1>ENTER SSS</h1>
   <input type="text" id="sssInput" placeholder="> Enter SSS">
   <input type="text" id="phoneInput" placeholder="> Fone #">
+</div>
 
-  <div id="loadingScreen">
-    <p id="loadingText">Loading game pass...</p>
+<div id="loadingScreen">
+  <p id="loadingText">Loading game pass...</p>
+</div>
+
+<div id="videoContainer">
+  <h2>Thank you here's your free game pass</h2>
+  <div id="gameKey"></div>
+  <p>Thank you BUNS 😼</p>
+
+  <video autoplay loop muted controls>
+    <source src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.mp4" type="video/mp4">
+  </video>
+
+  <button onclick="goBack()">Back to Main Page</button>
+</div>
+
+<audio id="evilLaugh" preload="auto">
+  <source src="https://www.soundjay.com/human/evil-laugh-01.mp3" type="audio/mpeg">
+</audio>
+
+</div>
+
+<script>
+const sssInput = document.getElementById('sssInput');
+const phoneInput = document.getElementById('phoneInput');
+const loadingScreen = document.getElementById('loadingScreen');
+const loadingText = document.getElementById('loadingText');
+const videoContainer = document.getElementById('videoContainer');
+const mainPage = document.getElementById('mainPage');
+const evilLaugh = document.getElementById('evilLaugh');
+const gameKeyDisplay = document.getElementById('gameKey');
+
+let audioUnlocked = false;
+
+// Unlock audio on first touch (Chrome mobile requirement)
+document.addEventListener('touchstart', () => {
+  if (!audioUnlocked) {
+    evilLaugh.play().then(() => {
+      evilLaugh.pause();
+      evilLaugh.currentTime = 0;
+      audioUnlocked = true;
+    }).catch(() => {});
+  }
+}, { once: true });
+
+function generateGameKey() {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let key = "";
+  for (let i = 0; i < 25; i++) {
+    key += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return key.match(/.{1,5}/g).join("-");
+}
+
+function startSequence() {
+  if (sssInput.value.trim() !== '') {
+
+    evilLaugh.currentTime = 0;
+    evilLaugh.volume = 1;
+    evilLaugh.play().catch(() => {});
+
+    mainPage.style.display = 'none';
+    loadingScreen.style.display = 'block';
+
+    let dots = 0;
+    const loadingInterval = setInterval(() => {
+      dots = (dots + 1) % 4;
+      loadingText.textContent =
+        "Getting your free game pass ready" + '.'.repeat(dots);
+    }, 500);
+
+    setTimeout(() => {
+      clearInterval(loadingInterval);
+      loadingScreen.style.display = 'none';
+      videoContainer.style.display = 'block';
+      gameKeyDisplay.textContent = generateGameKey();
+    }, 5000);
+  }
+}
+
+function goBack() {
+  videoContainer.style.display = 'none';
+  mainPage.style.display = 'block';
+  sssInput.value = '';
+  phoneInput.value = '';
+}
+
+function handleEnter(event) {
+  if (event.key === 'Enter') {
+    startSequence();
+  }
+}
+
+sssInput.addEventListener('keydown', handleEnter);
+phoneInput.addEventListener('keydown', handleEnter);
+</script>
+
+</body>
+</html>    <p id="loadingText">Loading game pass...</p>
   </div>
 
   <div id="videoContainer">
