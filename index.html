@@ -48,7 +48,7 @@ button {
 }
 
 #mainPage {
-  display: block;
+  display: block; /* MAIN PAGE ALWAYS FIRST */
 }
 
 #gameKey {
@@ -69,6 +69,7 @@ button {
 
 <div class="container">
 
+<!-- MAIN PAGE -->
 <div id="mainPage" class="section">
   <h1>ENTER SSS</h1>
   <input type="text" id="sssInput" placeholder="> Enter SSS">
@@ -76,18 +77,22 @@ button {
   <button onclick="startSequence()">Submit</button>
 </div>
 
+<!-- LOADING -->
 <div id="loadingScreen" class="section">
   <p>Accessing ultra secure database...</p>
 </div>
 
+<!-- FINAL PAGE -->
 <div id="videoContainer" class="section">
   <h2>Here's your totally real free game pass</h2>
   <div id="gameKey"></div>
   <div id="roastMessage"></div>
   <p>Thank you BUNS 😼</p>
 
-  <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif"
-       style="width:300px; border-radius:12px; margin-top:10px;">
+  <img 
+    src="https://media.tenor.com/5BVp6XKzE8kAAAAC/cat-laughing.gif"
+    style="width:300px; border-radius:12px; margin-top:10px; display:block; margin-left:auto; margin-right:auto;"
+  >
 
   <br><br>
   <button onclick="goBack()">Back to Main Page</button>
@@ -139,19 +144,16 @@ function showSection(section) {
 function startSequence() {
   if (document.getElementById("sssInput").value.trim() !== "") {
 
-    // 🔥 PLAY EVIL LAUGH (works because button click triggered it)
+    // Play laugh
     evilLaugh.currentTime = 0;
-    evilLaugh.volume = 1;
     evilLaugh.play().catch(() => {});
 
     showSection(loadingScreen);
 
     setTimeout(() => {
       gameKeyDisplay.textContent = generateGameKey();
-
-      const randomRoast = roasts[Math.floor(Math.random() * roasts.length)];
-      roastMessage.textContent = randomRoast;
-
+      roastMessage.textContent =
+        roasts[Math.floor(Math.random() * roasts.length)];
       showSection(videoContainer);
     }, 3000);
   }
@@ -163,221 +165,6 @@ function goBack() {
   document.getElementById("phoneInput").value = "";
   roastMessage.textContent = "";
 }
-</script>
-
-</body>
-</html></div>
-
-<script>
-const mainPage = document.getElementById("mainPage");
-const loadingScreen = document.getElementById("loadingScreen");
-const videoContainer = document.getElementById("videoContainer");
-const evilLaugh = document.getElementById("evilLaugh");
-const loadingText = document.getElementById("loadingText");
-const gameKeyDisplay = document.getElementById("gameKey");
-
-function generateGameKey() {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let key = "";
-  for (let i = 0; i < 25; i++) {
-    key += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return key.match(/.{1,5}/g).join("-");
-}
-
-function showSection(section) {
-  mainPage.style.display = "none";
-  loadingScreen.style.display = "none";
-  videoContainer.style.display = "none";
-  section.style.display = "block";
-}
-
-function startSequence() {
-  if (document.getElementById("sssInput").value.trim() !== "") {
-
-    // Play laugh (button click guarantees audio permission)
-    evilLaugh.currentTime = 0;
-    evilLaugh.volume = 1;
-    evilLaugh.play();
-
-    showSection(loadingScreen);
-
-    let dots = 0;
-    const loadingInterval = setInterval(() => {
-      dots = (dots + 1) % 4;
-      loadingText.textContent =
-        "Getting your free game pass ready" + '.'.repeat(dots);
-    }, 500);
-
-    setTimeout(() => {
-      clearInterval(loadingInterval);
-      gameKeyDisplay.textContent = generateGameKey();
-      showSection(videoContainer);
-    }, 5000);
-  }
-}
-
-function goBack() {
-  showSection(mainPage);
-  document.getElementById("sssInput").value = "";
-  document.getElementById("phoneInput").value = "";
-}
-</script>
-
-</body>
-</html>  <p id="loadingText">Loading game pass...</p>
-</div>
-
-<div id="videoContainer">
-  <h2>Thank you here's your free game pass</h2>
-  <div id="gameKey"></div>
-  <p>Thank you BUNS 😼</p>
-
-  <video autoplay loop muted controls>
-    <source src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.mp4" type="video/mp4">
-  </video>
-
-  <button onclick="goBack()">Back to Main Page</button>
-</div>
-
-<audio id="evilLaugh" preload="auto">
-  <source src="https://www.soundjay.com/human/evil-laugh-01.mp3" type="audio/mpeg">
-</audio>
-
-</div>
-
-<script>
-const sssInput = document.getElementById('sssInput');
-const phoneInput = document.getElementById('phoneInput');
-const loadingScreen = document.getElementById('loadingScreen');
-const loadingText = document.getElementById('loadingText');
-const videoContainer = document.getElementById('videoContainer');
-const mainPage = document.getElementById('mainPage');
-const evilLaugh = document.getElementById('evilLaugh');
-const gameKeyDisplay = document.getElementById('gameKey');
-
-let audioUnlocked = false;
-
-// Unlock audio on first touch (Chrome mobile requirement)
-document.addEventListener('touchstart', () => {
-  if (!audioUnlocked) {
-    evilLaugh.play().then(() => {
-      evilLaugh.pause();
-      evilLaugh.currentTime = 0;
-      audioUnlocked = true;
-    }).catch(() => {});
-  }
-}, { once: true });
-
-function generateGameKey() {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let key = "";
-  for (let i = 0; i < 25; i++) {
-    key += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return key.match(/.{1,5}/g).join("-");
-}
-
-function startSequence() {
-  if (sssInput.value.trim() !== '') {
-
-    evilLaugh.currentTime = 0;
-    evilLaugh.volume = 1;
-    evilLaugh.play().catch(() => {});
-
-    mainPage.style.display = 'none';
-    loadingScreen.style.display = 'block';
-
-    let dots = 0;
-    const loadingInterval = setInterval(() => {
-      dots = (dots + 1) % 4;
-      loadingText.textContent =
-        "Getting your free game pass ready" + '.'.repeat(dots);
-    }, 500);
-
-    setTimeout(() => {
-      clearInterval(loadingInterval);
-      loadingScreen.style.display = 'none';
-      videoContainer.style.display = 'block';
-      gameKeyDisplay.textContent = generateGameKey();
-    }, 5000);
-  }
-}
-
-function goBack() {
-  videoContainer.style.display = 'none';
-  mainPage.style.display = 'block';
-  sssInput.value = '';
-  phoneInput.value = '';
-}
-
-function handleEnter(event) {
-  if (event.key === 'Enter') {
-    startSequence();
-  }
-}
-
-sssInput.addEventListener('keydown', handleEnter);
-phoneInput.addEventListener('keydown', handleEnter);
-</script>
-
-</body>
-</html>    <p id="loadingText">Loading game pass...</p>
-  </div>
-
-  <div id="videoContainer">
-    <h2>Thank you here's your free game pass 😼</h2>
-    <video autoplay loop muted controls>
-      <source src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.mp4" type="video/mp4">
-    </video>
-  </div>
-
-  <audio id="evilLaugh" preload="auto">
-    <source src="https://www.soundjay.com/human/evil-laugh-01.mp3" type="audio/mpeg">
-  </audio>
-</div>
-
-<script>
-const sssInput = document.getElementById('sssInput');
-const phoneInput = document.getElementById('phoneInput');
-const loadingScreen = document.getElementById('loadingScreen');
-const loadingText = document.getElementById('loadingText');
-const videoContainer = document.getElementById('videoContainer');
-const evilLaugh = document.getElementById('evilLaugh');
-
-function startSequence() {
-  if (sssInput.value.trim() !== '') {
-
-    evilLaugh.currentTime = 0;
-    evilLaugh.volume = 1;
-    evilLaugh.play().catch(() => {});
-
-    sssInput.style.display = 'none';
-    phoneInput.style.display = 'none';
-    loadingScreen.style.display = 'block';
-
-    let dots = 0;
-    const loadingInterval = setInterval(() => {
-      dots = (dots + 1) % 4;
-      loadingText.textContent = "Getting your free game pass ready" + '.'.repeat(dots);
-    }, 500);
-
-    setTimeout(() => {
-      clearInterval(loadingInterval);
-      loadingScreen.style.display = 'none';
-      videoContainer.style.display = 'block';
-    }, 5000);
-  }
-}
-
-function handleEnter(event) {
-  if (event.key === 'Enter') {
-    startSequence();
-  }
-}
-
-sssInput.addEventListener('keydown', handleEnter);
-phoneInput.addEventListener('keydown', handleEnter);
 </script>
 
 </body>
