@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Portal</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  font-family: 'Courier New', monospace;
+  color: #00ff00;
+  text-align: center;
+  overflow: hidden;
+}
+
+body::before {
+  content: "010101010101010101010101010101010101010101";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  color: rgba(0, 255, 0, 0.05);
+  font-size: 20px;
+  line-height: 20px;
+  white-space: pre-wrap;
+  animation: scroll 20s linear infinite;
+  z-index: 0;
+}
+
+@keyframes scroll {
+  from { transform: translateY(-50%); }
+  to { transform: translateY(0); }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 25px #00ff00;
+  border: 1px solid #00ff00;
+  width: 350px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px #00ff00;
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #00ff00;
+  background: black;
+  color: #00ff00;
+  outline: none;
+  text-align: center;
+  box-shadow: 0 0 8px #00ff00;
+  margin-bottom: 10px;
+  width: 90%;
+}
+
+#loadingScreen {
+  display: none;
+  margin-top: 20px;
+  font-size: 16px;
+  text-shadow: 0 0 8px #00ff00;
+}
+
+#videoContainer {
+  display: none;
+  margin-top: 20px;
+}
+
+video {
+  width: 320px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #00ff00;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+  <h1>ENTER SSS</h1>
+
+  <input type="text" id="sssInput" placeholder="> Enter SSS">
+  <input type="text" id="phoneInput" placeholder="> Fone #">
+
+  <div id="loadingScreen">
+    <p id="loadingText">Loading game pass...</p>
+  </div>
+
+  <div id="videoContainer">
+    <h2>Thank you here's your free game pass 😼</h2>
+    <video autoplay loop muted controls>
+      <source src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <audio id="evilLaugh" preload="auto">
+    <source src="https://www.soundjay.com/human/evil-laugh-01.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<script>
+const sssInput = document.getElementById('sssInput');
+const phoneInput = document.getElementById('phoneInput');
+const loadingScreen = document.getElementById('loadingScreen');
+const loadingText = document.getElementById('loadingText');
+const videoContainer = document.getElementById('videoContainer');
+const evilLaugh = document.getElementById('evilLaugh');
+
+function startSequence() {
+  if (sssInput.value.trim() !== '') {
+
+    evilLaugh.currentTime = 0;
+    evilLaugh.volume = 1;
+    evilLaugh.play().catch(() => {});
+
+    sssInput.style.display = 'none';
+    phoneInput.style.display = 'none';
+    loadingScreen.style.display = 'block';
+
+    let dots = 0;
+    const loadingInterval = setInterval(() => {
+      dots = (dots + 1) % 4;
+      loadingText.textContent = "Getting your free game pass ready" + '.'.repeat(dots);
+    }, 500);
+
+    setTimeout(() => {
+      clearInterval(loadingInterval);
+      loadingScreen.style.display = 'none';
+      videoContainer.style.display = 'block';
+    }, 5000);
+  }
+}
+
+function handleEnter(event) {
+  if (event.key === 'Enter') {
+    startSequence();
+  }
+}
+
+sssInput.addEventListener('keydown', handleEnter);
+phoneInput.addEventListener('keydown', handleEnter);
+</script>
+
+</body>
+</html>
