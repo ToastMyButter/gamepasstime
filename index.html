@@ -13,7 +13,7 @@ height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background:#111;
+background:pink;
 font-family:Arial;
 color:white;
 text-align:center;
@@ -21,11 +21,11 @@ overflow:hidden;
 }
 
 .container{
-background:#1c1c1c;
+background:#ff6fa5;
 padding:40px;
 border-radius:15px;
 width:320px;
-box-shadow:0 0 20px rgba(255,255,255,0.2);
+box-shadow:0 0 20px rgba(0,0,0,0.2);
 position:relative;
 }
 
@@ -55,11 +55,16 @@ color:white;
 position:absolute;
 }
 
+.back{
+background:#333;
+color:white;
+}
+
 .hidden{
 display:none;
 }
 
-/* hearts animation */
+/* hearts */
 
 .heart{
 position:absolute;
@@ -91,7 +96,8 @@ animation:floatUp 3s linear forwards;
 <div id="lovePage" class="hidden">
 <h1>I love you too Sandra ❤️</h1>
 <p>You make my world better every day.</p>
-<p>I'm lucky to have you.</p>
+
+<button class="back" onclick="goBack()">Go Back</button>
 </div>
 
 <audio id="loveSong">
@@ -116,54 +122,26 @@ const song = document.getElementById("loveSong");
 
 /* NO button runs away */
 
-document.addEventListener("mousemove", (e)=>{
+document.addEventListener("mousemove",(e)=>{
 
-const rect = noBtn.getBoundingClientRect();
+const rect=noBtn.getBoundingClientRect();
 
-const distanceX = Math.abs(e.clientX - rect.left);
-const distanceY = Math.abs(e.clientY - rect.top);
+const distanceX=Math.abs(e.clientX-rect.left);
+const distanceY=Math.abs(e.clientY-rect.top);
 
-if(distanceX < 80 && distanceY < 80){
+if(distanceX<80 && distanceY<80){
 
-const x = Math.random() * 250;
-const y = Math.random() * 200;
+const x=Math.random()*250;
+const y=Math.random()*200;
 
-noBtn.style.left = x + "px";
-noBtn.style.top = y + "px";
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
 
 }
 
 });
 
-/* YES clicked */
-
-function yesClicked(){
-
-questionPage.style.display="none";
-lovePage.style.display="block";
-
-song.play().catch(()=>{});
-
-/* hearts animation */
-
-for(let i=0;i<30;i++){
-
-const heart=document.createElement("div");
-heart.classList.add("heart");
-heart.innerHTML="❤️";
-
-heart.style.left=Math.random()*window.innerWidth+"px";
-heart.style.top=(window.innerHeight-50)+"px";
-
-document.body.appendChild(heart);
-
-setTimeout(()=>heart.remove(),3000);
-
-}
-
-}
-
-/* NO clicked logic */
+/* NO button text changes */
 
 noBtn.addEventListener("click",()=>{
 
@@ -173,7 +151,7 @@ yesSize += 0.3;
 yesBtn.style.transform="scale("+yesSize+")";
 
 if(noCount===1){
-questionText.textContent="Are you sure? 🥲";
+questionText.textContent="Are you sure? 🥺";
 }
 
 else if(noCount===2){
@@ -193,6 +171,49 @@ questionText.textContent="Okay now you HAVE to press yes.";
 }
 
 });
+
+/* YES clicked */
+
+function yesClicked(){
+
+questionPage.style.display="none";
+lovePage.style.display="block";
+
+song.play().catch(()=>{});
+
+/* hearts */
+
+for(let i=0;i<30;i++){
+
+const heart=document.createElement("div");
+heart.classList.add("heart");
+heart.innerHTML="❤️";
+
+heart.style.left=Math.random()*window.innerWidth+"px";
+heart.style.top=(window.innerHeight-50)+"px";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>heart.remove(),3000);
+
+}
+
+}
+
+/* GO BACK */
+
+function goBack(){
+
+lovePage.style.display="none";
+questionPage.style.display="block";
+
+questionText.textContent="Do you love me?";
+
+noCount=0;
+yesSize=1;
+yesBtn.style.transform="scale(1)";
+
+}
 
 </script>
 
